@@ -16,4 +16,13 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_the_account_endpoint_returns_the_balance(): void
+    {
+        $response = $this->getJson('/api/account');
+
+        $response->assertOk()->assertExactJson([
+            'balance' => 2480,
+        ]);
+    }
 }
