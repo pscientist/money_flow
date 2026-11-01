@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import type { PageStatus } from '../types';
+import AppShell from '../AppShell';
+import { parseRecurringCosts, type PageStatus, type RecurringCost } from '../types';
 
 type AccountResponse = {
     balance: number;
@@ -19,22 +20,79 @@ function parseAccount(data: unknown): AccountResponse {
     return { balance };
 }
 
-function PlusIcon() {
+function CalendarIcon() {
     return (
         <svg viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M8 2.5v11M2.5 8h11" />
+            <rect x="2.5" y="3.5" width="11" height="10" rx="1.5" />
+            <path d="M2.5 6.5h11M5.5 2.5v2M10.5 2.5v2" />
         </svg>
     );
+}
+
+function CartIcon() {
+    return (
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M2.5 3.5h1.5l1.2 6.2h6.6l1.2-4.2H5" />
+            <circle cx="6.5" cy="12.5" r="0.8" />
+            <circle cx="11" cy="12.5" r="0.8" />
+        </svg>
+    );
+}
+
+function CoinsIcon() {
+    return (
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+            <ellipse cx="8" cy="5" rx="4.5" ry="2" />
+            <path d="M3.5 5v3c0 1.1 2 2 4.5 2s4.5-.9 4.5-2V5" />
+            <path d="M3.5 8v3c0 1.1 2 2 4.5 2s4.5-.9 4.5-2V8" />
+        </svg>
+    );
+}
+
+function ChevronIcon() {
+    return (
+        <svg className="chevron" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M6 3.5 10.5 8 6 12.5" />
+        </svg>
+    );
+}
+
+function Sparkline() {
+    return (
+        <svg className="sparkline" viewBox="0 0 180 72" aria-hidden="true">
+            <path d="M4 52c18-4 28-18 42-20 16-2 22 14 38 12 14-2 22-24 36-28 12-4 28 6 52 2" />
+            <circle cx="168" cy="18" r="4" />
+        </svg>
+    );
+}
+
+function formatDue(isoDate: string): string {
+    const [year, month, day] = isoDate.split('-');
+
+    if (!year || !month || !day) {
+        return isoDate;
+    }
+
+    return `${day}/${month}/${year.slice(2)}`;
+}
+
+function formatCents(cents: number): string {
+    return (cents / 100).toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
 }
 
 export default function Entry() {
     const [balance, setBalance] = useState<number | null>(null);
     const [status, setStatus] = useState<PageStatus>('loading');
+    const [upcoming, setUpcoming] = useState<RecurringCost[]>([]);
+    const [upcomingStatus, setUpcomingStatus] = useState<PageStatus>('loading');
 
     useEffect(() => {
         let ignore = false;
 
-        fetch('/api/account')
+        fetch('/api/account', { headers: { Accept: 'application/json' } })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Request failed');
@@ -54,6 +112,26 @@ export default function Entry() {
                 }
             });
 
+        fetch('/api/recurring-costs', { headers: { Accept: 'application/json' } })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                return response.json();
+            })
+            .then((data: unknown) => {
+                if (!ignore) {
+                    setUpcoming(parseRecurringCosts(data).slice(0, 3));
+                    setUpcomingStatus('ready');
+                }
+            })
+            .catch(() => {
+                if (!ignore) {
+                    setUpcomingStatus('error');
+                }
+            });
+
         return () => {
             ignore = true;
         };
@@ -69,26 +147,68 @@ export default function Entry() {
             });
 
     return (
+        <AppShell current="dashboard">
         <main className="entry">
-            <section className="balance" aria-label="Current account balance">
-                <p className="balance-label">Account balance</p>
-                <p className="balance-amount">{amount}</p>
-            </section>
+            <div className="entry-body">
+                <section className="balance-card" aria-label="Current account balance">
+                    <div className="balance-top">
+                        <div>
+                            <p className="balance-label">Account balance</p>
+                            <p className="balance-amount">{amount}</p>
+                        </div>
+                        <Sparkline />
+                    </div>
+                    {upcomingStatus === 'loading' && <p className="upcoming-note">Loading upcoming payments…</p>}
+                    {upcomingStatus === 'error' && <p className="upcoming-note">Could not load upcoming payments.</p>}
+                    {upcomingStatus === 'ready' && upcoming.length === 0 && (
+                        <p className="upcoming-note">No automatic payments scheduled.</p>
+                    )}
+                    {upcomingStatus === 'ready' && upcoming.length > 0 && (
+                        <ul className="upcoming">
+                            {upcoming.map((cost, index) => (
+                                <li key={cost.id}>
+                                    <CalendarIcon />
+                                    <span>
+                                        {index === 0 ? 'Next automatic payment' : 'Automatic payment'}
+                                        {` on ${formatDue(cost.next_due_on)}: ${formatCents(cost.amount_cents)} for ${cost.name}`}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
 
-            <nav className="actions" aria-label="Add an entry">
-                <a href="/recurring-costs">
-                    <PlusIcon />
-                    Recurring fixed
-                </a>
-                <button type="button">
-                    <PlusIcon />
-                    Casual spend
-                </button>
-                <button type="button">
-                    <PlusIcon />
-                    Income
-                </button>
-            </nav>
+                <nav className="actions" aria-label="Add an entry">
+                    <a href="/recurring-costs">
+                        <span className="action-icon action-icon-calendar"><CalendarIcon /></span>
+                        <span>
+                            <span className="action-label">Recurring fixed</span>
+                            <span className="action-detail">Bills that return on a schedule.</span>
+                        </span>
+                        <ChevronIcon />
+                    </a>
+                    <div className="action-group">
+                        <button type="button">
+                            <span className="action-icon action-icon-cart"><CartIcon /></span>
+                            <span>
+                                <span className="action-label">Casual spend</span>
+                                <span className="action-detail">One-off purchases.</span>
+                            </span>
+                            <ChevronIcon />
+                        </button>
+                        <p className="streak">0-day streak. Log a casual spend today to start one.</p>
+                    </div>
+                    <button type="button">
+                        <span className="action-icon action-icon-coins"><CoinsIcon /></span>
+                        <span>
+                            <span className="action-label">Income</span>
+                            <span className="action-detail">Money coming in.</span>
+                        </span>
+                        <ChevronIcon />
+                    </button>
+                </nav>
+            </div>
         </main>
+        </AppShell>
     );
 }

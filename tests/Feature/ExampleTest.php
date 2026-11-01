@@ -17,6 +17,14 @@ class ExampleTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_main_sections_return_the_app_shell(): void
+    {
+        $this->get('/income')->assertOk();
+        $this->get('/goals')->assertOk();
+        $this->get('/learn')->assertOk();
+        $this->get('/recurring-costs')->assertOk();
+    }
+
     public function test_the_account_endpoint_returns_the_balance(): void
     {
         $response = $this->getJson('/api/account');

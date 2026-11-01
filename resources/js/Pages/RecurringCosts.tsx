@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import AppShell from '../AppShell';
 import {
     parseRecurringCosts,
     type Interval,
@@ -259,6 +260,7 @@ export default function RecurringCosts() {
     }
 
     return (
+        <AppShell current="expenses">
         <main className="costs">
             <a className="back-link" href="/">Back</a>
             <h1>Recurring costs</h1>
@@ -347,5 +349,6 @@ export default function RecurringCosts() {
                 </ul>
             )}
         </main>
+        </AppShell>
     );
 }
