@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['name', 'amount_cents', 'interval', 'next_due_on'])]
+#[Fillable(['name', 'amount_cents', 'interval', 'next_due_on', 'receipt_path'])]
 class RecurringCost extends Model
 {
     /**

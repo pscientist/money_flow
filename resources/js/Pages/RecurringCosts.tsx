@@ -169,6 +169,67 @@ export default function RecurringCosts() {
             });
     }
 
+    function uploadReceipt(event: FormEvent<HTMLFormElement>, cost: RecurringCost) {
+        event.preventDefault();
+
+        const formElement = event.currentTarget;
+        const body = new FormData(formElement);
+        const file = body.get('receipt');
+
+        if (!(file instanceof File) || file.size === 0) {
+            setSaveError('Choose a receipt file.');
+
+            return;
+        }
+
+        // Leave Content-Type unset so the browser adds the multipart boundary.
+        fetch(`/api/recurring-costs/${cost.id}/receipt`, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body,
+        })
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                formElement.reset();
+                setSaveError('');
+                await loadCosts();
+            })
+            .catch(() => {
+                setSaveError('Could not upload this receipt.');
+            });
+    }
+
+    function viewReceipt(cost: RecurringCost) {
+        fetch(`/api/recurring-costs/${cost.id}/receipt`, {
+            headers: { Accept: 'application/json' },
+        })
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+
+                const data: unknown = await response.json();
+
+                if (typeof data !== 'object' || data === null) {
+                    throw new Error('Unexpected response');
+                }
+
+                const url = (data as Record<string, unknown>).url;
+
+                if (typeof url !== 'string' || url === '') {
+                    throw new Error('Unexpected response');
+                }
+
+                window.open(url, '_blank', 'noopener');
+            })
+            .catch(() => {
+                setSaveError('Could not open this receipt.');
+            });
+    }
+
     function deleteCost(cost: RecurringCost) {
         if (!window.confirm(`Delete ${cost.name}?`)) {
             return;
@@ -263,6 +324,20 @@ export default function RecurringCosts() {
                                     {cost.next_due_on}
                                 </p>
                             </div>
+                            <form className="receipt-form" onSubmit={(event) => uploadReceipt(event, cost)}>
+                                <input
+                                    type="file"
+                                    name="receipt"
+                                    accept="image/jpeg,image/png,image/webp,application/pdf"
+                                    aria-label={`Receipt for ${cost.name}`}
+                                />
+                                <button type="submit">Upload receipt</button>
+                                {cost.receipt_path && (
+                                    <button type="button" onClick={() => viewReceipt(cost)}>
+                                        View receipt
+                                    </button>
+                                )}
+                            </form>
                             <div className="row-actions">
                                 <button type="button" onClick={() => startEdit(cost)}>Edit</button>
                                 <button type="button" onClick={() => deleteCost(cost)}>Delete</button>

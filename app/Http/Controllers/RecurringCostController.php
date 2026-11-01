@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RecurringCost;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RecurringCostController extends Controller
 {
@@ -40,6 +41,38 @@ class RecurringCostController extends Controller
         return response()->json(null, 204);
     }
 
+    public function storeReceipt(Request $request, RecurringCost $recurringCost): JsonResponse
+    {
+        $request->validate([
+            'receipt' => ['required', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:5120'],
+        ]);
+
+        $previous = $recurringCost->receipt_path;
+
+        $path = $request->file('receipt')->store('receipts', 's3');
+        $recurringCost->update(['receipt_path' => $path]);
+
+        if (is_string($previous)) {
+            Storage::disk('s3')->delete($previous);
+        }
+
+        return response()->json($this->payload($recurringCost));
+    }
+
+    public function showReceipt(RecurringCost $recurringCost): JsonResponse
+    {
+        if (! is_string($recurringCost->receipt_path)) {
+            abort(404);
+        }
+
+        $url = Storage::disk('s3')->temporaryUrl(
+            $recurringCost->receipt_path,
+            now()->addMinutes(5),
+        );
+
+        return response()->json(['url' => $url]);
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -64,6 +97,7 @@ class RecurringCostController extends Controller
             'amount_cents' => $cost->amount_cents,
             'interval' => $cost->interval,
             'next_due_on' => $cost->next_due_on->toDateString(),
+            'receipt_path' => $cost->receipt_path,
         ];
     }
 }

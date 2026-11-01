@@ -13,6 +13,7 @@ export type RecurringCost = {
     amount_cents: number;
     interval: Interval;
     next_due_on: string;
+    receipt_path: string | null;
 };
 
 export type PageStatus = 'loading' | 'ready' | 'error';
@@ -32,6 +33,7 @@ export function parseRecurringCosts(data: unknown): RecurringCost[] {
         }
 
         const record = item as Record<string, unknown>;
+        const receiptPath = record.receipt_path;
 
         if (
             typeof record.id !== 'number'
@@ -39,6 +41,7 @@ export function parseRecurringCosts(data: unknown): RecurringCost[] {
             || typeof record.amount_cents !== 'number'
             || !isInterval(record.interval)
             || typeof record.next_due_on !== 'string'
+            || (receiptPath !== null && typeof receiptPath !== 'string')
         ) {
             throw new Error('Unexpected response');
         }
@@ -49,6 +52,7 @@ export function parseRecurringCosts(data: unknown): RecurringCost[] {
             amount_cents: record.amount_cents,
             interval: record.interval,
             next_due_on: record.next_due_on,
+            receipt_path: receiptPath,
         };
     });
 }

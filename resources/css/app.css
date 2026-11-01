@@ -152,7 +152,8 @@ body {
 .cost-form input,
 .cost-form select,
 .form-actions button,
-.row-actions button {
+.row-actions button,
+.receipt-form button {
     font: inherit;
     font-size: 1rem;
     letter-spacing: 0;
@@ -175,12 +176,26 @@ body {
 }
 
 .form-actions button,
-.row-actions button {
+.row-actions button,
+.receipt-form button {
     border: 1px solid #1c1915;
     border-radius: 0.6rem;
     background: #fff;
     padding: 0.55rem 0.85rem;
     cursor: pointer;
+}
+
+.receipt-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.receipt-form input[type="file"] {
+    font: inherit;
+    font-size: 0.85rem;
+    max-width: 16rem;
 }
 
 .form-actions button[type="submit"] {
@@ -201,6 +216,7 @@ body {
 
 .cost-list li {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 1rem;
     align-items: center;
