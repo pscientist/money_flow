@@ -6,7 +6,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
         @fonts
         @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+        @vite(['resources/css/app.css', 'resources/js/app.tsx'])
     </head>
     <body>
         <div id="app"></div>

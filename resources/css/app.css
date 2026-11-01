@@ -16,8 +16,8 @@ body {
     margin: 0;
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: safe center;
+    justify-content: safe center;
     background: #f4f1ea;
     color: #1c1915;
     font-family: var(--font-sans);
@@ -59,7 +59,8 @@ body {
     min-width: 14rem;
 }
 
-.actions button {
+.actions button,
+.actions a {
     appearance: none;
     display: flex;
     align-items: center;
@@ -72,10 +73,12 @@ body {
     font: inherit;
     font-size: 1rem;
     text-align: left;
+    text-decoration: none;
     cursor: pointer;
 }
 
-.actions button svg {
+.actions button svg,
+.actions a svg {
     width: 0.85rem;
     height: 0.85rem;
     flex-shrink: 0;
@@ -85,12 +88,14 @@ body {
     stroke-linecap: round;
 }
 
-.actions button:hover {
+.actions button:hover,
+.actions a:hover {
     background: #1c1915;
     color: #fff;
 }
 
-.actions button:focus-visible {
+.actions button:focus-visible,
+.actions a:focus-visible {
     outline: 2px solid #1c1915;
     outline-offset: 3px;
 }
@@ -108,4 +113,111 @@ body {
     .actions {
         min-width: 10.5rem;
     }
+}
+
+.costs {
+    width: min(40rem, 100%);
+    padding: 2rem 1.25rem 3rem;
+}
+
+.back-link {
+    color: #6d655c;
+    font-size: 0.9rem;
+}
+
+.costs h1 {
+    margin: 0.4rem 0 1.25rem;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+.cost-form,
+.cost-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.cost-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6d655c;
+}
+
+.cost-form input,
+.cost-form select,
+.form-actions button,
+.row-actions button {
+    font: inherit;
+    font-size: 1rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #1c1915;
+}
+
+.cost-form input,
+.cost-form select {
+    border: 1px solid #1c1915;
+    border-radius: 0.6rem;
+    background: #fff;
+    padding: 0.7rem 0.85rem;
+}
+
+.form-actions,
+.row-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.form-actions button,
+.row-actions button {
+    border: 1px solid #1c1915;
+    border-radius: 0.6rem;
+    background: #fff;
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+    background: #1c1915;
+    color: #fff;
+}
+
+.form-error {
+    margin: 0;
+    color: #8a2b1a;
+}
+
+.cost-list {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+}
+
+.cost-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.9rem 0;
+    border-top: 1px solid #ddd6cb;
+}
+
+.cost-name,
+.cost-meta {
+    margin: 0;
+}
+
+.cost-name {
+    font-weight: 600;
+}
+
+.cost-meta {
+    color: #6d655c;
+    text-transform: capitalize;
 }

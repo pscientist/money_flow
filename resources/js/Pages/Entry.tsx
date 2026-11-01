@@ -1,4 +1,23 @@
 import { useEffect, useState } from 'react';
+import type { PageStatus } from '../types';
+
+type AccountResponse = {
+    balance: number;
+};
+
+function parseAccount(data: unknown): AccountResponse {
+    if (typeof data !== 'object' || data === null || !('balance' in data)) {
+        throw new Error('Unexpected response');
+    }
+
+    const { balance } = data;
+
+    if (typeof balance !== 'number') {
+        throw new Error('Unexpected response');
+    }
+
+    return { balance };
+}
 
 function PlusIcon() {
     return (
@@ -9,8 +28,8 @@ function PlusIcon() {
 }
 
 export default function Entry() {
-    const [balance, setBalance] = useState(null);
-    const [status, setStatus] = useState('loading');
+    const [balance, setBalance] = useState<number | null>(null);
+    const [status, setStatus] = useState<PageStatus>('loading');
 
     useEffect(() => {
         let ignore = false;
@@ -23,9 +42,9 @@ export default function Entry() {
 
                 return response.json();
             })
-            .then((data) => {
+            .then((data: unknown) => {
                 if (!ignore) {
-                    setBalance(data.balance);
+                    setBalance(parseAccount(data).balance);
                     setStatus('ready');
                 }
             })
@@ -42,9 +61,9 @@ export default function Entry() {
 
     const amount = status === 'loading'
         ? 'Loading…'
-        : status === 'error'
+        : status === 'error' || balance === null
             ? 'Unavailable'
-            : Number(balance).toLocaleString('en-US', {
+            : balance.toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'USD',
             });
@@ -57,10 +76,10 @@ export default function Entry() {
             </section>
 
             <nav className="actions" aria-label="Add an entry">
-                <button type="button">
+                <a href="/recurring-costs">
                     <PlusIcon />
                     Recurring fixed
-                </button>
+                </a>
                 <button type="button">
                     <PlusIcon />
                     Casual spend
