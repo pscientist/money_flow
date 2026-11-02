@@ -439,6 +439,7 @@ body {
 .cost-form select,
 .form-actions button,
 .row-actions button,
+.day-nav button,
 .receipt-form button {
     font: inherit;
     font-size: 1rem;
@@ -463,6 +464,7 @@ body {
 
 .form-actions button,
 .row-actions button,
+.day-nav button,
 .receipt-form button {
     border: 1px solid #cfe0d4;
     border-radius: 0.7rem;
@@ -493,6 +495,32 @@ body {
 .form-error {
     margin: 0;
     color: #8a2b1a;
+}
+
+.day-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.day-nav button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.day-label {
+    text-align: center;
+}
+
+.day-label p,
+.day-total {
+    margin: 0;
+}
+
+.day-total {
+    color: #5d6d63;
 }
 
 .cost-list {

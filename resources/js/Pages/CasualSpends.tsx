@@ -7,12 +7,43 @@ import {
     type PageStatus,
 } from '../types';
 
-const emptyForm: CasualSpendForm = {
-    description: '',
-    amount: '',
-    category: '',
-    spent_on: '',
-};
+function blankForm(spentOn: string): CasualSpendForm {
+    return {
+        description: '',
+        amount: '',
+        category: '',
+        spent_on: spentOn,
+    };
+}
+
+function todayIso(): string {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+
+    return `${now.getFullYear()}-${month}-${day}`;
+}
+
+function shiftIsoDate(isoDate: string, days: number): string {
+    const [year, month, day] = isoDate.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    date.setDate(date.getDate() + days);
+
+    const nextMonth = String(date.getMonth() + 1).padStart(2, '0');
+    const nextDay = String(date.getDate()).padStart(2, '0');
+
+    return `${date.getFullYear()}-${nextMonth}-${nextDay}`;
+}
+
+function formatDay(isoDate: string): string {
+    const [year, month, day] = isoDate.split('-');
+
+    if (!year || !month || !day) {
+        return isoDate;
+    }
+
+    return `${day}/${month}/${year.slice(2)}`;
+}
 
 // The amount field is dollars as typed. The API stores integer cents.
 function dollarsToCents(value: string): number | null {
@@ -35,7 +66,10 @@ function centsToDollars(cents: number): string {
 export default function CasualSpends() {
     const [spends, setSpends] = useState<CasualSpend[]>([]);
     const [status, setStatus] = useState<PageStatus>('loading');
-    const [form, setForm] = useState<CasualSpendForm>(emptyForm);
+    const [selectedDay, setSelectedDay] = useState(todayIso);
+    const [form, setForm] = useState<CasualSpendForm>(() => blankForm(todayIso()));
+    // The date field follows the day on screen until the user edits that field.
+    const [dateFollowsDay, setDateFollowsDay] = useState(true);
     // null means the form is creating a new spend. A number means it is editing that row.
     const [editingId, setEditingId] = useState<number | null>(null);
     const [saveError, setSaveError] = useState('');
@@ -94,8 +128,20 @@ export default function CasualSpends() {
     function updateField(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
 
+        if (name === 'spent_on') {
+            setDateFollowsDay(false);
+        }
+
         if (name === 'description' || name === 'amount' || name === 'category' || name === 'spent_on') {
             setForm((current) => ({ ...current, [name]: value }));
+        }
+    }
+
+    function showDay(nextDay: string) {
+        setSelectedDay(nextDay);
+
+        if (editingId === null && dateFollowsDay) {
+            setForm((current) => ({ ...current, spent_on: nextDay }));
         }
     }
 
@@ -113,7 +159,8 @@ export default function CasualSpends() {
     function cancelEdit() {
         setEditingId(null);
         setSaveError('');
-        setForm(emptyForm);
+        setDateFollowsDay(true);
+        setForm(blankForm(selectedDay));
     }
 
     function saveSpend(event: FormEvent<HTMLFormElement>) {
@@ -152,11 +199,14 @@ export default function CasualSpends() {
                     throw new Error('Request failed');
                 }
 
+                const savedDay = form.spent_on;
+
                 setSaveError('');
                 setEditingId(null);
-                setForm(emptyForm);
+                setDateFollowsDay(true);
+                setSelectedDay(savedDay);
+                setForm(blankForm(savedDay));
 
-                // load the casual spends
                 await loadSpends();
             })
             .catch(() => {
@@ -188,6 +238,11 @@ export default function CasualSpends() {
                 setSaveError('Could not delete this spend.');
             });
     }
+
+    const daySpends = spends
+        .filter((spend) => spend.spent_on === selectedDay)
+        .sort((left, right) => right.id - left.id);
+    const dayTotal = daySpends.reduce((total, spend) => total + spend.amount_cents, 0);
 
     return (
         <AppShell current="casual">
@@ -237,28 +292,46 @@ export default function CasualSpends() {
 
             {status === 'loading' && <p>Loading…</p>}
             {status === 'error' && <p>Could not load casual spends.</p>}
-            {status === 'ready' && spends.length === 0 && <p>No casual spends yet.</p>}
-            {status === 'ready' && spends.length > 0 && (
-                <ul className="cost-list">
-                    {spends.map((spend) => (
-                        <li key={spend.id}>
-                            <div>
-                                <p className="cost-name">{spend.description}</p>
-                                <p className="cost-meta">
-                                    {centsToDollars(spend.amount_cents)}
-                                    {' · '}
-                                    {spend.category}
-                                    {' · '}
-                                    {spend.spent_on}
-                                </p>
-                            </div>
-                            <div className="row-actions">
-                                <button type="button" onClick={() => startEdit(spend)}>Edit</button>
-                                <button type="button" onClick={() => deleteSpend(spend)}>Delete</button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+            {status === 'ready' && (
+                <>
+                    <nav className="day-nav" aria-label="Spend day">
+                        <button type="button" onClick={() => showDay(shiftIsoDate(selectedDay, -1))}>
+                            Previous
+                        </button>
+                        <div className="day-label">
+                            <p>{formatDay(selectedDay)}</p>
+                            <p className="day-total">{centsToDollars(dayTotal)}</p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => showDay(shiftIsoDate(selectedDay, 1))}
+                            disabled={selectedDay === todayIso()}
+                        >
+                            Next
+                        </button>
+                    </nav>
+                    {daySpends.length === 0 && <p>No casual spends on this day.</p>}
+                    {daySpends.length > 0 && (
+                        <ul className="cost-list">
+                            {daySpends.map((spend) => (
+                                <li key={spend.id}>
+                                    <div>
+                                        <p className="cost-name">{spend.description}</p>
+                                        <p className="cost-meta">
+                                            {centsToDollars(spend.amount_cents)}
+                                            {' · '}
+                                            {spend.category}
+                                        </p>
+                                    </div>
+                                    <div className="row-actions">
+                                        <button type="button" onClick={() => startEdit(spend)}>Edit</button>
+                                        <button type="button" onClick={() => deleteSpend(spend)}>Delete</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </>
             )}
         </main>
         </AppShell>
