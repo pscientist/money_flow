@@ -10,6 +10,10 @@ Route::get('/recurring-costs', function () {
     return view('app');
 });
 
+Route::get('/casual-spends', function () {
+    return view('app');
+});
+
 Route::get('/income', function () {
     return view('app');
 });

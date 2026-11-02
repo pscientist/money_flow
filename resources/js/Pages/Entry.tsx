@@ -188,14 +188,14 @@ export default function Entry() {
                         <ChevronIcon />
                     </a>
                     <div className="action-group">
-                        <button type="button">
+                        <a href="/casual-spends">
                             <span className="action-icon action-icon-cart"><CartIcon /></span>
                             <span>
                                 <span className="action-label">Casual spend</span>
                                 <span className="action-detail">One-off purchases.</span>
                             </span>
                             <ChevronIcon />
-                        </button>
+                        </a>
                         <p className="streak">0-day streak. Log a casual spend today to start one.</p>
                     </div>
                     <button type="button">

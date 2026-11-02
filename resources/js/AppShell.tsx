@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 const links = [
     { id: 'dashboard', href: '/', label: 'Dashboard', icon: HomeIcon },
     { id: 'expenses', href: '/recurring-costs', label: 'Expenses', icon: ExpensesIcon },
+    { id: 'casual', href: '/casual-spends', label: 'Casual spend', icon: CartIcon },
     { id: 'income', href: '/income', label: 'Income', icon: IncomeIcon },
     { id: 'goals', href: '/goals', label: 'Goals', icon: GoalsIcon },
     { id: 'learn', href: '/learn', label: 'Learn', icon: LearnIcon },
@@ -59,6 +60,16 @@ function HomeIcon() {
     return (
         <svg viewBox="0 0 16 16" aria-hidden="true">
             <path d="M2.5 7.5 8 2.5l5.5 5V13a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V7.5Z" />
+        </svg>
+    );
+}
+
+function CartIcon() {
+    return (
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M2.5 3.5h1.5l1.2 6.2h6.6l1.2-4.2H5" />
+            <circle cx="6.5" cy="12.5" r="0.8" />
+            <circle cx="11" cy="12.5" r="0.8" />
         </svg>
     );
 }
