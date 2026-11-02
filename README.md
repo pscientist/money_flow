@@ -53,6 +53,12 @@ Run the tests with:
 php artisan test
 ```
 
+Run only the casual spend API test with:
+
+```sh
+php artisan test --filter=CasualSpendTest
+```
+
 ## Future enhancements
 
 - The account balance is still a fixed number. It is not calculated from the costs.
