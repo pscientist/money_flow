@@ -22,8 +22,7 @@ MoneyFlow is a personal finance app. Laravel serves a JSON API, and a React and 
 - A dashboard shows the account balance and the next recurring payments.
 - Recurring costs can be added, edited, and deleted. Amounts are stored as integer cents.
 - One receipt per cost is uploaded through the API, stored in a private S3 bucket, and opened with a short-lived signed URL. The browser never receives the AWS keys.
-- `php artisan mail:sample` sends one hardcoded message through Amazon SES.
-- Feature tests cover the API. The receipt test uses a fake S3 disk, so it does not need AWS credentials.
+- Feature tests cover the API. 
 
 ## Run it
 
@@ -59,8 +58,13 @@ Run only the casual spend API test with:
 php artisan test --filter=CasualSpendTest
 ```
 
+Working message thru Amazon SES
+
+```sh
+php artisan mail:sample 
+```
+
 ## Future enhancements
 
-- The account balance is still a fixed number. It is not calculated from the costs.
-- Casual spend, income, goals, and learn are navigation placeholders.
-- There is no login yet.
+- Financial goals setting and implementation.
+- Personalised financail advice
