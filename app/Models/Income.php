@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['amount_cents', 'date', 'description', 'source'])]
+#[Fillable(['amount_cents', 'date', 'description', 'source', 'tax_rate'])]
 class Income extends Model
 {
     /**
@@ -18,6 +18,7 @@ class Income extends Model
         return [
             'amount_cents' => 'integer',
             'date' => 'date',
+            'tax_rate' => 'float',
         ];
     }
 }
