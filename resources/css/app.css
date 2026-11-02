@@ -477,6 +477,18 @@ body {
     cursor: pointer;
 }
 
+.shortcuts button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.shortcut-plus {
+    color: #1f7a45;
+    font-weight: 600;
+    line-height: 1;
+}
+
 .receipt-form {
     display: flex;
     flex-wrap: wrap;

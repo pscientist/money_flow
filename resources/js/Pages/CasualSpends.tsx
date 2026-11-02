@@ -275,6 +275,7 @@ export default function CasualSpends() {
                         type="button"
                         onClick={() => applyShortcut(preset)}
                     >
+                        <span className="shortcut-plus" aria-hidden="true">+</span>
                         {preset.description}
                     </button>
                 ))}
