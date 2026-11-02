@@ -45,6 +45,12 @@ function formatDay(isoDate: string): string {
     return `${day}/${month}/${year.slice(2)}`;
 }
 
+const shortcuts = [
+    { description: 'Coffee', amount: '6.50', category: 'Coffee' },
+    { description: 'Groceries', amount: '17.50', category: 'Groceries' },
+    { description: 'Transport', amount: '8.00', category: 'Transport' },
+] as const;
+
 // The amount field is dollars as typed. The API stores integer cents.
 function dollarsToCents(value: string): number | null {
     const amount = Number(value);
@@ -156,6 +162,18 @@ export default function CasualSpends() {
         });
     }
 
+    function applyShortcut(preset: (typeof shortcuts)[number]) {
+        setEditingId(null);
+        setSaveError('');
+        setDateFollowsDay(true);
+        setForm({
+            description: preset.description,
+            amount: preset.amount,
+            category: preset.category,
+            spent_on: selectedDay,
+        });
+    }
+
     function cancelEdit() {
         setEditingId(null);
         setSaveError('');
@@ -249,6 +267,18 @@ export default function CasualSpends() {
         <main className="costs">
             <a className="back-link" href="/">Back</a>
             <h1>Casual spend</h1>
+
+            <div className="shortcuts">
+                {shortcuts.map((preset) => (
+                    <button
+                        key={preset.description}
+                        type="button"
+                        onClick={() => applyShortcut(preset)}
+                    >
+                        {preset.description}
+                    </button>
+                ))}
+            </div>
 
             <form className="cost-form" onSubmit={saveSpend}>
                 <label>

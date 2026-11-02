@@ -440,6 +440,7 @@ body {
 .form-actions button,
 .row-actions button,
 .day-nav button,
+.shortcuts button,
 .receipt-form button {
     font: inherit;
     font-size: 1rem;
@@ -457,14 +458,17 @@ body {
 }
 
 .form-actions,
-.row-actions {
+.row-actions,
+.shortcuts {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
 .form-actions button,
 .row-actions button,
 .day-nav button,
+.shortcuts button,
 .receipt-form button {
     border: 1px solid #cfe0d4;
     border-radius: 0.7rem;
