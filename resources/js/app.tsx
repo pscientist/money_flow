@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import type { ReactNode } from 'react';
 import CasualSpends from './Pages/CasualSpends';
 import Entry from './Pages/Entry';
+import Incomes from './Pages/Incomes';
 import RecurringCosts from './Pages/RecurringCosts';
 import Section from './Pages/Section';
 
@@ -15,7 +16,7 @@ const pages: Record<string, ReactNode> = {
     '/': <Entry />,
     '/recurring-costs': <RecurringCosts />,
     '/casual-spends': <CasualSpends />,
-    '/income': <Section current="income" title="Income" detail="Money coming in will be listed here." />,
+    '/income': <Incomes />,
     '/goals': <Section current="goals" title="Goals" detail="Savings goals will be listed here." />,
     '/learn': <Section current="learn" title="Learn" detail="Short guides will be listed here." />,
 };

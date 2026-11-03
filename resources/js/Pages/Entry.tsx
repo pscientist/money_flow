@@ -198,14 +198,14 @@ export default function Entry() {
                         </a>
                         <p className="streak">0-day streak. Log a casual spend today to start one.</p>
                     </div>
-                    <button type="button">
+                    <a href="/income">
                         <span className="action-icon action-icon-coins"><CoinsIcon /></span>
                         <span>
                             <span className="action-label">Income</span>
                             <span className="action-detail">Money coming in.</span>
                         </span>
                         <ChevronIcon />
-                    </button>
+                    </a>
                 </nav>
             </div>
         </main>

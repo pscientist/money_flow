@@ -107,3 +107,54 @@ export function parseCasualSpends(data: unknown): CasualSpend[] {
         };
     });
 }
+
+export type IncomeForm = {
+    description: string;
+    amount: string;
+    source: string;
+    tax_rate: string;
+    date: string;
+};
+
+export type Income = {
+    id: number;
+    amount_cents: number;
+    date: string;
+    description: string;
+    source: string;
+    tax_rate: number;
+};
+
+export function parseIncomes(data: unknown): Income[] {
+    if (!Array.isArray(data)) {
+        throw new Error('Unexpected response');
+    }
+
+    return data.map((item) => {
+        if (typeof item !== 'object' || item === null) {
+            throw new Error('Unexpected response');
+        }
+
+        const record = item as Record<string, unknown>;
+
+        if (
+            typeof record.id !== 'number'
+            || typeof record.amount_cents !== 'number'
+            || typeof record.date !== 'string'
+            || typeof record.description !== 'string'
+            || typeof record.source !== 'string'
+            || typeof record.tax_rate !== 'number'
+        ) {
+            throw new Error('Unexpected response');
+        }
+
+        return {
+            id: record.id,
+            amount_cents: record.amount_cents,
+            date: record.date,
+            description: record.description,
+            source: record.source,
+            tax_rate: record.tax_rate,
+        };
+    });
+}
