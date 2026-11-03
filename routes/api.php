@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CasualSpendController;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\RecurringCostController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,8 @@ Route::get('/casual-spends', [CasualSpendController::class, 'index']);
 Route::post('/casual-spends', [CasualSpendController::class, 'store']);
 Route::patch('/casual-spends/{casualSpend}', [CasualSpendController::class, 'update']);
 Route::delete('/casual-spends/{casualSpend}', [CasualSpendController::class, 'destroy']);
+
+Route::get('/incomes', [IncomeController::class, 'index']);
+Route::post('/incomes', [IncomeController::class, 'store']);
+Route::patch('/incomes/{income}', [IncomeController::class, 'update']);
+Route::delete('/incomes/{income}', [IncomeController::class, 'destroy']);
