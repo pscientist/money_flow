@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         User::query()->firstOrCreate(
             ['email' => 'cathyl@example.com'],
             User::factory()->raw([
-                'name' => 'cathyl',
+                'username' => 'cathyl',
+                'nickname' => 'cathyl',
                 'email' => 'cathyl@example.com',
             ]),
         );
