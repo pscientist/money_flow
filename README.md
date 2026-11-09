@@ -64,6 +64,19 @@ Working message thru Amazon SES
 php artisan mail:sample 
 ```
 
+## Agent skills
+
+`readable-code` is a project skill, not one of the skills Laravel Boost installs. The agent still applies it when writing or reviewing code, because the file is `.claude/skills/readable-code/SKILL.md`.
+
+It asks the agent to:
+
+- Follow the project's existing conventions.
+- Use descriptive variable and function names.
+- Comment business rules, non-obvious decisions, assumptions, and workarounds.
+- Skip comments that simply repeat the code.
+- Update a comment when the behaviour it describes changes.
+- Understand unclear code before adding an explanatory comment.
+
 ## Future enhancements
 
 - Financial goals setting and implementation.
