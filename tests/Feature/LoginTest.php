@@ -16,6 +16,7 @@ class LoginTest extends TestCase
         $cathyl = User::factory()->create([
             'username' => 'cathyl',
             'nickname' => 'cathyl',
+            'email' => 'cathyl@example.com',
         ]);
 
         $response = $this->postJson('/api/login', [
@@ -24,11 +25,13 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJsonPath('nickname', 'cathyl');
+            ->assertJsonPath('nickname', 'cathyl')
+            ->assertJsonPath('username', 'cathyl')
+            ->assertJsonPath('email', 'cathyl@example.com');
 
         $keys = array_keys($response->json());
         sort($keys);
-        $this->assertSame(['nickname', 'token'], $keys);
+        $this->assertSame(['email', 'nickname', 'token', 'username'], $keys);
 
         $token = PersonalAccessToken::findToken($response->json('token'));
 

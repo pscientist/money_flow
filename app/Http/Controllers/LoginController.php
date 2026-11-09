@@ -28,6 +28,8 @@ class LoginController extends Controller
         return response()->json([
             'token' => $user->createToken('browser')->plainTextToken,
             'nickname' => $user->nickname,
+            'username' => $user->username,
+            'email' => $user->email,
         ]);
     }
 }

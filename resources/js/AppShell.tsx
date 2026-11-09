@@ -10,11 +10,13 @@ const links = [
     { id: 'login', href: '/login', label: 'Login', icon: LoginIcon },
 ] as const;
 
-export type NavId = (typeof links)[number]['id'];
+export type NavId = (typeof links)[number]['id'] | 'profile';
 
 function logOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('nickname');
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
     window.location.assign('/');
 }
 
@@ -57,8 +59,8 @@ export default function AppShell({ current, children }: { current: NavId; childr
                         </button>
                         <a
                             className="account"
-                            href="/login"
-                            aria-current={current === 'login' ? 'page' : undefined}
+                            href="/profile"
+                            aria-current={current === 'profile' ? 'page' : undefined}
                         >
                             <span className="account-name">{nickname}</span>
                             <span className="account-avatar" aria-hidden="true">

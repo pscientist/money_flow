@@ -29,3 +29,7 @@ Route::get('/learn', function () {
 Route::get('/login', function () {
     return view('app');
 });
+
+Route::get('/profile', function () {
+    return view('app');
+});

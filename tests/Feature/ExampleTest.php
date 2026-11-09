@@ -26,6 +26,7 @@ class ExampleTest extends TestCase
         $this->get('/learn')->assertOk();
         $this->get('/recurring-costs')->assertOk();
         $this->get('/login')->assertOk();
+        $this->get('/profile')->assertOk();
     }
 
     public function test_the_account_endpoint_returns_the_balance(): void

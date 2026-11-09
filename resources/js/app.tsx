@@ -4,6 +4,7 @@ import CasualSpends from './Pages/CasualSpends';
 import Entry from './Pages/Entry';
 import Incomes from './Pages/Incomes';
 import Login from './Pages/Login';
+import Profile from './Pages/Profile';
 import RecurringCosts from './Pages/RecurringCosts';
 import Section from './Pages/Section';
 
@@ -21,6 +22,7 @@ const pages: Record<string, ReactNode> = {
     '/goals': <Section current="goals" title="Goals" detail="Savings goals will be listed here." />,
     '/learn': <Section current="learn" title="Learn" detail="Short guides will be listed here." />,
     '/login': <Login />,
+    '/profile': <Profile />,
 };
 
 createRoot(root).render(pages[window.location.pathname] ?? <Entry />);

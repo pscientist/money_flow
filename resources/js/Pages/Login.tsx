@@ -5,20 +5,37 @@ import AppShell from '../AppShell';
 type LoginResponse = {
     token: string;
     nickname: string;
+    username: string;
+    email: string;
 };
 
 function parseLogin(data: unknown): LoginResponse {
-    if (typeof data !== 'object' || data === null || !('token' in data) || !('nickname' in data)) {
+    if (
+        typeof data !== 'object'
+        || data === null
+        || !('token' in data)
+        || !('nickname' in data)
+        || !('username' in data)
+        || !('email' in data)
+    ) {
         throw new Error('Unexpected response');
     }
 
-    const { token, nickname } = data;
+    const { token, nickname, username, email } = data;
 
-    if (typeof token !== 'string' || typeof nickname !== 'string' || token === '') {
+    if (
+        typeof token !== 'string'
+        || typeof nickname !== 'string'
+        || typeof username !== 'string'
+        || typeof email !== 'string'
+        || token === ''
+        || username === ''
+        || email === ''
+    ) {
         throw new Error('Unexpected response');
     }
 
-    return { token, nickname };
+    return { token, nickname, username, email };
 }
 
 export default function Login() {
@@ -47,6 +64,8 @@ export default function Login() {
 
                 localStorage.setItem('token', session.token);
                 localStorage.setItem('nickname', session.nickname);
+                localStorage.setItem('username', session.username);
+                localStorage.setItem('email', session.email);
                 window.location.assign('/');
             })
             .catch(() => {
