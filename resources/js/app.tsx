@@ -7,6 +7,7 @@ import Login from './Pages/Login';
 import Profile from './Pages/Profile';
 import RecurringCosts from './Pages/RecurringCosts';
 import Section from './Pages/Section';
+import Welcome from './Pages/Welcome';
 
 const root = document.getElementById('app');
 
@@ -15,7 +16,8 @@ if (!root) {
 }
 
 const pages: Record<string, ReactNode> = {
-    '/': <Entry />,
+    '/': <Welcome />,
+    '/dashboard': <Entry />,
     '/recurring-costs': <RecurringCosts />,
     '/casual-spends': <CasualSpends />,
     '/income': <Incomes />,
@@ -25,7 +27,7 @@ const pages: Record<string, ReactNode> = {
     '/profile': <Profile />,
 };
 
-const privatePaths = ['/', '/casual-spends', '/income', '/recurring-costs', '/profile'];
+const privatePaths = ['/dashboard', '/casual-spends', '/income', '/recurring-costs', '/profile'];
 const path = window.location.pathname;
 // An unknown address renders the dashboard, so it is private too.
 const isPrivatePage = privatePaths.includes(path) || !(path in pages);

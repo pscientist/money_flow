@@ -263,7 +263,7 @@ export default function CasualSpends() {
     return (
         <AppShell current="casual">
         <main className="costs">
-            <a className="back-link" href="/">Back</a>
+            <a className="back-link" href="/dashboard">Back</a>
             <h1>Casual spend</h1>
 
             <div className="shortcuts">

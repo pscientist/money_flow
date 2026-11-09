@@ -23,6 +23,7 @@ class ExampleTest extends TestCase
 
     public function test_main_sections_return_the_app_shell(): void
     {
+        $this->get('/dashboard')->assertOk();
         $this->get('/income')->assertOk();
         $this->get('/goals')->assertOk();
         $this->get('/learn')->assertOk();

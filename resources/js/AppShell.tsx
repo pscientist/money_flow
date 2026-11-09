@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 const links = [
-    { id: 'dashboard', href: '/', label: 'Dashboard', icon: HomeIcon },
+    { id: 'dashboard', href: '/dashboard', label: 'Dashboard', icon: HomeIcon },
     { id: 'expenses', href: '/recurring-costs', label: 'Expenses', icon: ExpensesIcon },
     { id: 'casual', href: '/casual-spends', label: 'Casual spend', icon: CartIcon },
     { id: 'income', href: '/income', label: 'Income', icon: IncomeIcon },
@@ -10,7 +10,7 @@ const links = [
     { id: 'login', href: '/login', label: 'Login', icon: LoginIcon },
 ] as const;
 
-export type NavId = (typeof links)[number]['id'] | 'profile';
+export type NavId = (typeof links)[number]['id'] | 'profile' | 'welcome';
 
 function logOut() {
     localStorage.removeItem('token');

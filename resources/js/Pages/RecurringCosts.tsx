@@ -260,7 +260,7 @@ export default function RecurringCosts() {
     return (
         <AppShell current="expenses">
         <main className="costs">
-            <a className="back-link" href="/">Back</a>
+            <a className="back-link" href="/dashboard">Back</a>
             <h1>Recurring costs</h1>
 
             <form className="cost-form" onSubmit={saveCost}>

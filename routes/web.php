@@ -6,6 +6,10 @@ Route::get('/', function () {
     return view('app');
 });
 
+Route::get('/dashboard', function () {
+    return view('app');
+});
+
 Route::get('/recurring-costs', function () {
     return view('app');
 });

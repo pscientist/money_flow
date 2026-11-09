@@ -66,7 +66,7 @@ export default function Login() {
                 localStorage.setItem('nickname', session.nickname);
                 localStorage.setItem('username', session.username);
                 localStorage.setItem('email', session.email);
-                window.location.assign('/');
+                window.location.assign('/dashboard');
             })
             .catch(() => {
                 setError('Could not sign in.');

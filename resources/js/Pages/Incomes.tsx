@@ -211,7 +211,7 @@ export default function Incomes() {
     return (
         <AppShell current="income">
         <main className="costs">
-            <a className="back-link" href="/">Back</a>
+            <a className="back-link" href="/dashboard">Back</a>
             <h1>Income</h1>
 
             <form className="cost-form" onSubmit={saveIncome}>
