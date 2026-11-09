@@ -12,6 +12,12 @@ const links = [
 
 export type NavId = (typeof links)[number]['id'];
 
+function logOut() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('nickname');
+    window.location.assign('/');
+}
+
 export default function AppShell({ current, children }: { current: NavId; children: ReactNode }) {
     const nickname = localStorage.getItem('nickname');
     const menuLinks = nickname ? links.filter((link) => link.id !== 'login') : links;
@@ -45,16 +51,21 @@ export default function AppShell({ current, children }: { current: NavId; childr
                     </nav>
                 </div>
                 {nickname && (
-                    <a
-                        className="account"
-                        href="/login"
-                        aria-current={current === 'login' ? 'page' : undefined}
-                    >
-                        <span className="account-name">{nickname}</span>
-                        <span className="account-avatar" aria-hidden="true">
-                            <LoginIcon />
-                        </span>
-                    </a>
+                    <div className="account-bar">
+                        <button type="button" className="logout" onClick={logOut}>
+                            Log out
+                        </button>
+                        <a
+                            className="account"
+                            href="/login"
+                            aria-current={current === 'login' ? 'page' : undefined}
+                        >
+                            <span className="account-name">{nickname}</span>
+                            <span className="account-avatar" aria-hidden="true">
+                                <LoginIcon />
+                            </span>
+                        </a>
+                    </div>
                 )}
                 <img className="header-art" src="/images/header-morning.jpg" alt="" />
             </header>
