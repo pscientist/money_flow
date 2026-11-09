@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -29,8 +31,15 @@ class ExampleTest extends TestCase
         $this->get('/profile')->assertOk();
     }
 
+    public function test_a_guest_cannot_read_the_account(): void
+    {
+        $this->getJson('/api/account')->assertUnauthorized();
+    }
+
     public function test_the_account_endpoint_returns_the_balance(): void
     {
+        Sanctum::actingAs(User::factory()->create());
+
         $this->getJson('/api/account')->assertOk()->assertExactJson([
             'balance' => 0,
         ]);

@@ -25,4 +25,13 @@ const pages: Record<string, ReactNode> = {
     '/profile': <Profile />,
 };
 
-createRoot(root).render(pages[window.location.pathname] ?? <Entry />);
+const privatePaths = ['/', '/casual-spends', '/income', '/recurring-costs', '/profile'];
+const path = window.location.pathname;
+// An unknown address renders the dashboard, so it is private too.
+const isPrivatePage = privatePaths.includes(path) || !(path in pages);
+
+if (!localStorage.getItem('token') && isPrivatePage) {
+    window.location.replace('/login');
+} else {
+    createRoot(root).render(pages[path] ?? <Entry />);
+}

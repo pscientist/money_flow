@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class CasualSpendTest extends TestCase
@@ -11,6 +13,8 @@ class CasualSpendTest extends TestCase
 
     public function test_casual_spends_can_be_created_listed_updated_and_deleted(): void
     {
+        Sanctum::actingAs(User::factory()->create());
+
         $created = $this->postJson('/api/casual-spends', [
             'amount_cents' => 1250,
             'spent_on' => '2026-11-02',

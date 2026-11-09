@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class RecurringCostTest extends TestCase
@@ -13,6 +15,8 @@ class RecurringCostTest extends TestCase
 
     public function test_recurring_costs_can_be_created_listed_updated_and_deleted(): void
     {
+        Sanctum::actingAs(User::factory()->create());
+
         $created = $this->postJson('/api/recurring-costs', [
             'name' => 'Rent',
             'amount_cents' => 180000,
@@ -59,6 +63,7 @@ class RecurringCostTest extends TestCase
 
     public function test_a_receipt_can_be_uploaded_replaced_and_opened_with_a_signed_url(): void
     {
+        Sanctum::actingAs(User::factory()->create());
         Storage::fake('s3');
 
         $id = $this->postJson('/api/recurring-costs', [
@@ -103,6 +108,8 @@ class RecurringCostTest extends TestCase
 
     public function test_recurring_cost_amount_must_be_a_positive_number_of_cents(): void
     {
+        Sanctum::actingAs(User::factory()->create());
+
         $this->postJson('/api/recurring-costs', [
             'name' => 'Rent',
             'amount_cents' => 0,
