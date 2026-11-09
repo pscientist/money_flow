@@ -13,6 +13,9 @@ const links = [
 export type NavId = (typeof links)[number]['id'];
 
 export default function AppShell({ current, children }: { current: NavId; children: ReactNode }) {
+    const nickname = localStorage.getItem('nickname');
+    const menuLinks = nickname ? links.filter((link) => link.id !== 'login') : links;
+
     return (
         <div className="shell">
             <header className="topbar">
@@ -25,9 +28,8 @@ export default function AppShell({ current, children }: { current: NavId; childr
                         <span className="tagline">Track what comes in, what repeats, and what you spend.</span>
                     </a>
                     <nav className="main-nav" aria-label="Main">
-                        {links.map((link) => {
+                        {menuLinks.map((link) => {
                             const Icon = link.icon;
-                            const nickname = link.id === 'login' ? localStorage.getItem('nickname') : null;
 
                             return (
                                 <a
@@ -36,12 +38,24 @@ export default function AppShell({ current, children }: { current: NavId; childr
                                     aria-current={link.id === current ? 'page' : undefined}
                                 >
                                     <Icon />
-                                    {nickname ? nickname : link.label}
+                                    {link.label}
                                 </a>
                             );
                         })}
                     </nav>
                 </div>
+                {nickname && (
+                    <a
+                        className="account"
+                        href="/login"
+                        aria-current={current === 'login' ? 'page' : undefined}
+                    >
+                        <span className="account-name">{nickname}</span>
+                        <span className="account-avatar" aria-hidden="true">
+                            <LoginIcon />
+                        </span>
+                    </a>
+                )}
                 <img className="header-art" src="/images/header-morning.jpg" alt="" />
             </header>
             {children}

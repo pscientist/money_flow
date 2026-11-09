@@ -58,6 +58,47 @@ body {
     mask-image: linear-gradient(90deg, transparent, #000 28%);
 }
 
+.account {
+    position: absolute;
+    z-index: 2;
+    top: 1rem;
+    right: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.3rem 0.35rem 0.3rem 0.9rem;
+    border-radius: 999px;
+    background: #1f7a45;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.account:hover {
+    background: #1a6b3c;
+    color: #fff;
+}
+
+.account-avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.account-avatar svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 .brand {
     display: flex;
     flex-direction: column;
