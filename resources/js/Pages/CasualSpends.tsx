@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { apiHeaders } from '../api';
 import AppShell from '../AppShell';
 import {
     parseCasualSpends,
@@ -82,7 +83,7 @@ export default function CasualSpends() {
 
     function loadSpends(): Promise<void> {
         return fetch('/api/casual-spends', {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -105,7 +106,7 @@ export default function CasualSpends() {
         let ignore = false;
 
         fetch('/api/casual-spends', {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -206,10 +207,7 @@ export default function CasualSpends() {
 
         fetch(url, {
             method: editingId ? 'PATCH' : 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
+            headers: apiHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(payload),
         })
             .then(async (response) => {
@@ -239,7 +237,7 @@ export default function CasualSpends() {
 
         fetch(`/api/casual-spends/${spend.id}`, {
             method: 'DELETE',
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {

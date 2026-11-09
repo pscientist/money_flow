@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CasualSpendController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecurringCostController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,5 @@ Route::get('/incomes', [IncomeController::class, 'index']);
 Route::post('/incomes', [IncomeController::class, 'store']);
 Route::patch('/incomes/{income}', [IncomeController::class, 'update']);
 Route::delete('/incomes/{income}', [IncomeController::class, 'destroy']);
+
+Route::post('/login', LoginController::class);

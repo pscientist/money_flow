@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { apiHeaders } from '../api';
 import AppShell from '../AppShell';
 import {
     parseIncomes,
@@ -53,7 +54,7 @@ export default function Incomes() {
 
     function loadIncomes(): Promise<void> {
         return fetch('/api/incomes', {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -76,7 +77,7 @@ export default function Incomes() {
         let ignore = false;
 
         fetch('/api/incomes', {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -162,12 +163,7 @@ export default function Incomes() {
 
         fetch(url, {
             method: editingId ? 'PATCH' : 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-
-            
+            headers: apiHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(payload),
         })
             .then(async (response) => {
@@ -194,7 +190,7 @@ export default function Incomes() {
 
         fetch(`/api/incomes/${income.id}`, {
             method: 'DELETE',
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {

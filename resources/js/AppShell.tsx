@@ -7,6 +7,7 @@ const links = [
     { id: 'income', href: '/income', label: 'Income', icon: IncomeIcon },
     { id: 'goals', href: '/goals', label: 'Goals', icon: GoalsIcon },
     { id: 'learn', href: '/learn', label: 'Learn', icon: LearnIcon },
+    { id: 'login', href: '/login', label: 'Login', icon: LoginIcon },
 ] as const;
 
 export type NavId = (typeof links)[number]['id'];
@@ -26,6 +27,7 @@ export default function AppShell({ current, children }: { current: NavId; childr
                     <nav className="main-nav" aria-label="Main">
                         {links.map((link) => {
                             const Icon = link.icon;
+                            const nickname = link.id === 'login' ? localStorage.getItem('nickname') : null;
 
                             return (
                                 <a
@@ -34,7 +36,7 @@ export default function AppShell({ current, children }: { current: NavId; childr
                                     aria-current={link.id === current ? 'page' : undefined}
                                 >
                                     <Icon />
-                                    {link.label}
+                                    {nickname ? nickname : link.label}
                                 </a>
                             );
                         })}
@@ -96,6 +98,15 @@ function GoalsIcon() {
         <svg viewBox="0 0 16 16" aria-hidden="true">
             <circle cx="8" cy="8" r="5.25" />
             <circle cx="8" cy="8" r="2.25" />
+        </svg>
+    );
+}
+
+function LoginIcon() {
+    return (
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+            <circle cx="8" cy="5.5" r="2.25" />
+            <path d="M3.5 13.25c.6-2.2 2.3-3.25 4.5-3.25s3.9 1.05 4.5 3.25" />
         </svg>
     );
 }

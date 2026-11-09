@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { apiHeaders } from '../api';
 import AppShell from '../AppShell';
 import { parseRecurringCosts, type PageStatus, type RecurringCost } from '../types';
 
@@ -92,7 +93,7 @@ export default function Entry() {
     useEffect(() => {
         let ignore = false;
 
-        fetch('/api/account', { headers: { Accept: 'application/json' } })
+        fetch('/api/account', { headers: apiHeaders() })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Request failed');
@@ -112,7 +113,7 @@ export default function Entry() {
                 }
             });
 
-        fetch('/api/recurring-costs', { headers: { Accept: 'application/json' } })
+        fetch('/api/recurring-costs', { headers: apiHeaders() })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Request failed');

@@ -25,3 +25,7 @@ Route::get('/goals', function () {
 Route::get('/learn', function () {
     return view('app');
 });
+
+Route::get('/login', function () {
+    return view('app');
+});

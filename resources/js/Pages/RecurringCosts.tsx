@@ -1,4 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { apiHeaders } from '../api';
 import AppShell from '../AppShell';
 import {
     parseRecurringCosts,
@@ -43,7 +44,7 @@ export default function RecurringCosts() {
 
     function loadCosts(): Promise<void> {
         return fetch('/api/recurring-costs', {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -66,7 +67,7 @@ export default function RecurringCosts() {
         let ignore = false;
 
         fetch('/api/recurring-costs', {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -149,10 +150,7 @@ export default function RecurringCosts() {
 
         fetch(url, {
             method: editingId ? 'PATCH' : 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
+            headers: apiHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(payload),
         })
             .then(async (response) => {
@@ -186,7 +184,7 @@ export default function RecurringCosts() {
         // Leave Content-Type unset so the browser adds the multipart boundary.
         fetch(`/api/recurring-costs/${cost.id}/receipt`, {
             method: 'POST',
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
             body,
         })
             .then(async (response) => {
@@ -205,7 +203,7 @@ export default function RecurringCosts() {
 
     function viewReceipt(cost: RecurringCost) {
         fetch(`/api/recurring-costs/${cost.id}/receipt`, {
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then(async (response) => {
                 if (!response.ok) {
@@ -238,7 +236,7 @@ export default function RecurringCosts() {
 
         fetch(`/api/recurring-costs/${cost.id}`, {
             method: 'DELETE',
-            headers: { Accept: 'application/json' },
+            headers: apiHeaders(),
         })
             .then((response) => {
                 if (!response.ok) {
