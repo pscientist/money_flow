@@ -10,7 +10,7 @@ const links = [
     { id: 'login', href: '/login', label: 'Login', icon: LoginIcon },
 ] as const;
 
-export type NavId = (typeof links)[number]['id'] | 'profile' | 'welcome';
+export type NavId = (typeof links)[number]['id'] | 'profile';
 
 function logOut() {
     localStorage.removeItem('token');
