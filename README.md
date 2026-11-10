@@ -24,6 +24,10 @@ MoneyFlow is a personal finance app. Laravel serves a JSON API, and a React and 
 - One receipt per cost is uploaded through the API, stored in a private S3 bucket, and opened with a short-lived signed URL. The browser never receives the AWS keys.
 - Feature tests cover the API. 
 
+## Receipt bucket
+
+Create a private S3 bucket and leave Block Public Access on. Attach `infra/receipts-policy.json` to an IAM user for this app. That policy allows put, get, and delete under `receipts/`, and list only that prefix. Put the user's access key, secret, region, and bucket name in `.env`. Change the bucket name inside the policy if you use a different bucket.
+
 ## Run it
 
 ```sh
